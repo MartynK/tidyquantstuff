@@ -11,6 +11,7 @@ library(pROC)
 library(glmnet)
 library(nlme)
 
+options(warn = -1)  # Suppresses warnings globally
 
 # turn above into function
 get_columns_for_model <- function(df) {
@@ -187,4 +188,7 @@ fit_model_at_date <- function(dat,
 
 
 # make predictions for current day
-fit_model_at_date(dat, date_limit = today(), open = 500)
+prediction <- fit_model_at_date(dat, date_limit = today(), open = 500)
+
+# Print it (useful for background jobs 'n' junk)
+print(prediction)
