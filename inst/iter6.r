@@ -121,7 +121,8 @@ add_open <- function(dat, open) {
            low = NA,
            close = NA,
            adjusted = NA,
-           volume = NA) %>%
+           volume = NA,
+           volat_open = NA) %>%
       # generate the other cols
       get_columns_for_model()
 
@@ -150,7 +151,8 @@ fit_model_at_date <- function(dat,
                                                       ns(highlagperc,df=1) +
                                                       ns(diff,df=1) *
                                                       ns(date_yday,df=2) +
-                                                      ns(volumelag,df=1)
+                                                      ns(volumelag,df=1) +
+                                                      ns(volat_open, df = 2)
                                                   )"),
                               date_limit = as.Date("2020-07-01"),
                               return_just_predictions = TRUE,
@@ -163,7 +165,7 @@ fit_model_at_date <- function(dat,
   }
 
   if (is.na(open) == FALSE) {
-    dat <- add_open(dat, open)
+    #dat <- add_open(dat, open) # BREAKS!
   }
 
   dat_act <- dat %>%
@@ -215,7 +217,7 @@ fit_model_at_date(dat, date_limit = today(), open = 1000)
 open_mat <-
   data.frame(
     open = seq(last(dat$open)*0.8,
-               last(dat$open)*1.2,length.out = 10),
+               last(dat$open)*1.2,length.out = 3),
     pred = NA
   )
 
